@@ -4,7 +4,7 @@ import pixelmatch from "pixelmatch";
 
 const WebcamComponent = () => {
   const videoRef = useRef(null);
-  const prevCanvasRef = useRef(null); // เพิ่ม useRef สำหรับเก็บ canvas ก่อนหน้า
+  const prevCanvasRef = useRef(null);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -60,20 +60,23 @@ const WebcamComponent = () => {
               canSendRequest = true;
             }, 1000);
           }
-        }, 100);
+        }, 1000);
       }
     };
 
     const saveAndSendImage = async (canvas) => {
       if (canvas) {
         const Image = canvas.toDataURL("image/jpeg");
+        //console.log(Image);
         const date = new Date().toISOString().split("T")[0];
         const time = new Date().toISOString().split("T")[1].split(".")[0];
         let times = time.replace(/[:\-]/g, "-");
-        const SaveImage = new File([Image], `img ${date}-${times}.jpg`, {
-          type: "image/jpg",
+        const SaveImage = new File([Image], `img-${date}-${times}.jpg`, {
+          type: "image/jpeg",
         });
-        console.log(Image);
+
+        const formData = new FormData();
+        formData.append("image", SaveImage);
         const prevCanvas = prevCanvasRef.current;
 
         if (prevCanvas) {
@@ -85,17 +88,18 @@ const WebcamComponent = () => {
             return;
           }
         } else {
-          if (Image) {
-            console.log("have image");
+          if (SaveImage) {
+            console.log("Have image");
             try {
               const response = await fetch(
                 "http://127.0.0.1:8000/api/face_recognition/",
                 {
                   method: "POST",
-                  headers: {
+                  /*headers: {
                     "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ image: SaveImage }),
+                    // Add other headers if needed
+                  },*/
+                  body: formData,
                 }
               );
 
@@ -115,7 +119,6 @@ const WebcamComponent = () => {
         }
       }
     };
-
     const calculateImageSimilarity = async (currentCanvas, prevCanvas) => {
       const diff = pixelmatch(
         currentCanvas
@@ -141,6 +144,7 @@ const WebcamComponent = () => {
 
   return (
     <div className="body-detect">
+      <canvas></canvas>
       <video ref={videoRef} autoPlay playsInline muted />
     </div>
   );

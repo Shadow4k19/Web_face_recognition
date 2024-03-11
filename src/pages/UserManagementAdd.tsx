@@ -65,10 +65,8 @@ export default function UserManagementAdd() {
     setCroppedImage(croppedImageStr ?? "");
     setCropped(true);
   };
-  const Createpath = () => {};
   const handleSubmit = async () => {
     try {
-      Createpath();
       if (TH_name !== "" && EN_name !== "" && croppedImage !== "") {
         const blob = await fetch(`image/png;base64,${croppedImage}`).then(
           (res) => res.blob()
