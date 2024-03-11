@@ -3,7 +3,7 @@ import * as faceapi from "face-api.js";
 
 const WebcamComponent = () => {
   const videoRef = useRef(null);
-
+  let a = 0;
   useEffect(() => {
     const loadModels = async () => {
       await Promise.all([
@@ -50,39 +50,43 @@ const WebcamComponent = () => {
           faceapi.draw.drawDetections(canvas, resizedDetections);
 
           if (detections.length > 0) {
-            const imageBlob = await canvas.toDataURL("image/jpeg");
-            saveAndSendImage(imageBlob);
+            saveAndSendImage(canvas);
           }
         }, 100);
       }
     };
 
-    const saveAndSendImage = async (imageBlob) => {
-      const blob = await fetch(imageBlob).then((res) => res.blob());
-
+    const saveAndSendImage = async (canvas) => {
+      const blob = await new Promise((resolve) =>
+        canvas.toBlob(resolve, "image/jpeg")
+      );
       const formData = new FormData();
       formData.append("image", blob, "img.jpg");
+      if (a == 0) {
+        console.log(formData.values);
+        a++;
+      }
       /*
-      if (formData) {
-        try {
-          const response = await fetch(
-            "http://127.0.0.1:8000/api/face_recognition/",
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
-          if (response.ok) {
-            console.log("Image sent to the backend successfully.");
-          } else {
-            const errorData = await response.json();
-            console.error(errorData.error);
-            console.error("Failed to send image to the backend.");
-          }
-        } catch (error) {
-          console.error("Error sending image to the backend:", error);
+  if (formData) {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/face_recognition/",
+        {
+          method: "POST",
+          body: formData,
         }
-      }*/
+      );
+      if (response.ok) {
+        console.log("Image sent to the backend successfully.");
+      } else {
+        const errorData = await response.json();
+        console.error(errorData.error);
+        console.error("Failed to send image to the backend.");
+      }
+    } catch (error) {
+      console.error("Error sending image to the backend:", error);
+    }
+  }*/
     };
 
     loadModels();

@@ -4,7 +4,7 @@ import GreetCard from "../components/GreetCard";
 import SettingButton from "../components/SettingButton";
 import { PersonGreet } from "../types/PersonGreet";
 //import FaceDetectionComponent from '../components/face_detect1';
-import WebcamComponent from "../components/Face_Detect";
+import WebcamComponent from "../components/Face_Detect3";
 import "../components/Face_detect.css";
 
 export default function Home({ persons }: { persons: PersonGreet[] }) {
