@@ -32,7 +32,9 @@ const WebcamComponent = () => {
         await new Promise((resolve) => {
           video.addEventListener("loadeddata", resolve, { once: true });
         });
-        const canvas = faceapi.createCanvasFromMedia(video);
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
         document.body.append(canvas);
         const displaySize = {
           width: video.videoWidth,
@@ -54,7 +56,7 @@ const WebcamComponent = () => {
           faceapi.draw.drawDetections(canvas, resizedDetections);
 
           if (detections.length > 0 && canSendRequest) {
-            saveAndSendImage(canvas);
+            await saveAndSendImage(video);
             canSendRequest = false;
             setTimeout(() => {
               canSendRequest = true;
@@ -64,19 +66,31 @@ const WebcamComponent = () => {
       }
     };
 
-    const saveAndSendImage = async (canvas) => {
-      if (canvas) {
-        const Image = canvas.toDataURL("image/jpeg");
-        //console.log(Image);
-        const date = new Date().toISOString().split("T")[0];
-        const time = new Date().toISOString().split("T")[1].split(".")[0];
-        let times = time.replace(/[:\-]/g, "-");
-        const SaveImage = new File([Image], `img-${date}-${times}.jpg`, {
-          type: "image/jpeg",
+    const saveAndSendImage = async (video) => {
+      if (video) {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        const { videoWidth, videoHeight } = video;
+
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+        context.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+        const blob = await new Promise((resolve) => {
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, "image/png");
         });
 
+        const date = new Date().toISOString().split("T")[0];
+        const time = new Date().toISOString().split("T")[1].split(".")[0];
+        const formattedTime = time.replace(/[:\-]/g, "-");
+        const fileName = `img-${date}-${formattedTime}.png`;
+
+        const file = new File([blob], fileName, { type: "image/png" });
+
         const formData = new FormData();
-        formData.append("image", SaveImage);
+        formData.append("image", file);
         const prevCanvas = prevCanvasRef.current;
 
         if (prevCanvas) {
@@ -88,22 +102,20 @@ const WebcamComponent = () => {
             return;
           }
         } else {
-          if (SaveImage) {
+          if (file) {
             console.log("Have image");
             try {
               const response = await fetch(
                 "http://127.0.0.1:8000/api/face_recognition/",
                 {
                   method: "POST",
-                  /*headers: {
-                    "Content-Type": "application/json",
-                    // Add other headers if needed
-                  },*/
                   body: formData,
                 }
               );
 
               if (response.ok) {
+                const data = await response.json();
+                console.log(data);
                 console.log("Image sent to the backend successfully");
               } else {
                 const errorData = await response.json();
@@ -143,8 +155,7 @@ const WebcamComponent = () => {
   }, []);
 
   return (
-    <div className="body-detect">
-      <canvas></canvas>
+    <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
     </div>
   );
