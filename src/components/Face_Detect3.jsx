@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import pixelmatch from "pixelmatch";
 
 const WebcamComponent = () => {
   const videoRef = useRef(null);
   const prevCanvasRef = useRef(null);
+  const [datamap, setDatamap] = useState([]);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -91,17 +92,22 @@ const WebcamComponent = () => {
 
         const formData = new FormData();
         formData.append("image", file);
-        const prevCanvas = prevCanvasRef.current;
 
-        if (prevCanvas) {
-          const similarityScore = await calculateImageSimilarity(
-            canvas,
-            prevCanvas
-          );
-          if (similarityScore >= 0.9) {
-            return;
-          }
+        // Initialize similarityScore to avoid undefined error
+        let similarityScore = 0;
+
+        const prevBlob = prevCanvasRef.current;
+
+        if (prevBlob) {
+          similarityScore = await calculateImageSimilarity(blob, prevBlob);
+          console.log("Similarity Score:", similarityScore);
+        }
+
+        if (similarityScore >= 0.5) {
+          console.log("ไม่ดู (Not looking)");
+          return;
         } else {
+          console.log("Do (Looking)");
           if (file) {
             console.log("Have image");
             try {
@@ -115,6 +121,7 @@ const WebcamComponent = () => {
 
               if (response.ok) {
                 const data = await response.json();
+                setDatamap(data);
                 console.log(data);
                 console.log("Image sent to the backend successfully");
               } else {
@@ -127,25 +134,56 @@ const WebcamComponent = () => {
             }
           }
 
-          prevCanvasRef.current = canvas;
+          prevCanvasRef.current = blob;
         }
       }
     };
-    const calculateImageSimilarity = async (currentCanvas, prevCanvas) => {
+
+    const calculateImageSimilarity = async (currentBlob, prevBlob) => {
+      const currentCanvas = document.createElement("canvas");
+      const currentContext = currentCanvas.getContext("2d");
+
+      const prevCanvas = document.createElement("canvas");
+      const prevContext = prevCanvas.getContext("2d");
+
+      const currentImage = new Image();
+      const prevImage = new Image();
+
+      currentImage.src = URL.createObjectURL(currentBlob);
+      prevImage.src = URL.createObjectURL(prevBlob);
+
+      await Promise.all([
+        new Promise((resolve) => (currentImage.onload = resolve)),
+        new Promise((resolve) => (prevImage.onload = resolve)),
+      ]);
+
+      currentCanvas.width = currentImage.width;
+      currentCanvas.height = currentImage.height;
+
+      prevCanvas.width = prevImage.width;
+      prevCanvas.height = prevImage.height;
+
+      currentContext.drawImage(currentImage, 0, 0);
+      prevContext.drawImage(prevImage, 0, 0);
+
       const diff = pixelmatch(
-        currentCanvas
-          .getContext("2d")
-          .getImageData(0, 0, currentCanvas.width, currentCanvas.height).data,
-        prevCanvas
-          .getContext("2d")
-          .getImageData(0, 0, prevCanvas.width, prevCanvas.height).data,
+        currentContext.getImageData(
+          0,
+          0,
+          currentCanvas.width,
+          currentCanvas.height
+        ).data,
+        prevContext.getImageData(0, 0, prevCanvas.width, prevCanvas.height)
+          .data,
         null,
         currentCanvas.width,
         currentCanvas.height,
         { threshold: 0.1 }
       );
+
       const totalPixels = currentCanvas.width * currentCanvas.height;
       const similarityScore = 1 - diff / totalPixels;
+
       return similarityScore;
     };
 
