@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
-import GreetCard from "../components/GreetCard";
+import { Container, Row } from "react-bootstrap";
 import SettingButton from "../components/SettingButton";
 import { PersonGreet } from "../types/PersonGreet";
 import WebcamComponent from "../components/Face_Detect3";
@@ -17,13 +16,6 @@ export default function Home({ persons }: { persons: PersonGreet[] }) {
         </Row>
         <Row>
           <WebcamComponent />
-        </Row>
-        <Row>
-          <Container>
-            {persons.map((person, index) => (
-              <GreetCard person={person} key={index}></GreetCard>
-            ))}
-          </Container>
         </Row>
       </Container>
       <SettingButton></SettingButton>

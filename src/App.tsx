@@ -42,7 +42,7 @@ function App() {
                 {
                   avatarImage: "./images/userImage.jpg",
                   moodImage: "./images/moods/cool.png",
-                  speech: "Hello ____ you seem happy today",
+                  text: "Hello ____ you seem happy today",
                 },
               ]}
             ></Home>

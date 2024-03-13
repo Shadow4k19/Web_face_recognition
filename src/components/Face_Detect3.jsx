@@ -1,11 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
+import { Container, Row } from "react-bootstrap";
+import GreetCard from "../components/GreetCard";
 import pixelmatch from "pixelmatch";
 
 const WebcamComponent = () => {
   const videoRef = useRef(null);
   const prevCanvasRef = useRef(null);
   const [datamap, setDatamap] = useState([]);
+  const canSendRequest = useRef(true);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -26,8 +29,6 @@ const WebcamComponent = () => {
     };
 
     const detectAndDraw = async () => {
-      let canSendRequest = true;
-
       if (videoRef.current) {
         const video = videoRef.current;
         await new Promise((resolve) => {
@@ -55,15 +56,20 @@ const WebcamComponent = () => {
           );
           canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
           faceapi.draw.drawDetections(canvas, resizedDetections);
-
-          if (detections.length > 0 && canSendRequest) {
+          if (detections.length > 0 && canSendRequest.current) {
             await saveAndSendImage(video);
-            canSendRequest = false;
-            setTimeout(() => {
-              canSendRequest = true;
-            }, 1000);
+            canSendRequest.current = false;
+            if (canSendRequest.current === false) {
+              Change();
+            }
           }
-        }, 1000);
+        }, 3000);
+        const Change = () => {
+          setTimeout(() => {
+            //console.log("Change");
+            canSendRequest.current = true;
+          }, 3000);
+        };
       }
     };
 
@@ -93,47 +99,49 @@ const WebcamComponent = () => {
         const formData = new FormData();
         formData.append("image", file);
 
-        // Initialize similarityScore to avoid undefined error
         let similarityScore = 0;
 
         const prevBlob = prevCanvasRef.current;
 
         if (prevBlob) {
           similarityScore = await calculateImageSimilarity(blob, prevBlob);
-          console.log("Similarity Score:", similarityScore);
+          //console.log("Similarity Score:", similarityScore);
         }
 
-        if (similarityScore >= 0.5) {
-          console.log("ไม่ดู (Not looking)");
+        if (similarityScore >= 0.4) {
+          //console.log("ไม่ดู (Not looking)");
           return;
         } else {
-          console.log("Do (Looking)");
-          if (file) {
-            console.log("Have image");
-            try {
-              const response = await fetch(
-                "http://127.0.0.1:8000/api/face_recognition/",
-                {
-                  method: "POST",
-                  body: formData,
+          //console.log("Do (Looking)");
+          const fetchData = async () => {
+            if (file) {
+              //console.log("Have image");
+              try {
+                const response = await fetch(
+                  "http://127.0.0.1:8000/api/face_recognition/",
+                  {
+                    method: "POST",
+                    body: formData,
+                  }
+                );
+
+                if (response.ok) {
+                  const data = await response.json();
+                  setDatamap(data.result);
+                  //console.log(data.result);
+                  //console.log(datamap);
+                  //console.log("Image sent to the backend successfully");
+                } else {
+                  const errorData = await response.json();
+                  console.error(errorData.error);
+                  console.error("Failed to send image to the backend");
                 }
-              );
-
-              if (response.ok) {
-                const data = await response.json();
-                setDatamap(data);
-                console.log(data);
-                console.log("Image sent to the backend successfully");
-              } else {
-                const errorData = await response.json();
-                console.error(errorData.error);
-                console.error("Failed to send image to the backend");
+              } catch (error) {
+                console.error("Error sending image to the backend:", error);
               }
-            } catch (error) {
-              console.error("Error sending image to the backend:", error);
             }
-          }
-
+          };
+          fetchData();
           prevCanvasRef.current = blob;
         }
       }
@@ -190,11 +198,24 @@ const WebcamComponent = () => {
     loadModels();
     detectAndDraw();
     return () => {};
-  }, []);
+  }, [setDatamap]);
+
+  useEffect(() => {}, [datamap]);
 
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
+      <Row>
+        <Container>
+          {datamap.length > 0 ? (
+            datamap.map((person, index) => (
+              <GreetCard person={person} key={index}></GreetCard>
+            ))
+          ) : (
+            <p></p>
+          )}
+        </Container>
+      </Row>
     </div>
   );
 };

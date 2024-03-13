@@ -8,7 +8,6 @@ import ModalSuccess from "../components/ModalSuccess";
 export default function UserManagementAdd() {
   const [TH_name, setTHName] = useState("");
   const [EN_name, setENName] = useState("");
-  const [folderpath, setPath] = useState("");
   const [image, setImage] = useState("");
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({
@@ -81,19 +80,26 @@ export default function UserManagementAdd() {
         formData.append("TH_name", TH_name);
         formData.append("Eng_name", EN_name);
         formData.append("img", croppedFile);
-        const response = await fetch("http://127.0.0.1:8000/api/users/", {
-          method: "POST",
-          body: formData,
-        });
-        const responseData = await response.json();
-        console.log(responseData);
-        if (response.ok) {
-          setShowModal(true);
-        } else {
-          console.error("Save failed");
-          console.log(responseData);
-          alert("Save failed");
-        }
+        const fetchData = async () => {
+          try {
+            const response = await fetch("http://127.0.0.1:8000/api/users/", {
+              method: "POST",
+              body: formData,
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+            if (response.ok) {
+              setShowModal(true);
+            } else {
+              console.error("Save failed");
+              console.log(responseData);
+              alert("Save failed");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        fetchData();
       } else {
         alert("Some or all inputs are empty");
       }
