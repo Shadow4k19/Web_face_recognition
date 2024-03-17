@@ -28,6 +28,7 @@ export default function UserManagementSearch({
 }: {
   searchFunction: (name: string) => UserInfo;
 }) {
+  const img_path = "http://127.0.0.1:8000/static/img";
   const initialData: dataserch[] = [];
   const [fetchData, setFetchdata] = useState(initialData);
   const imagePath = "./images/userImage.jpg";
@@ -178,7 +179,7 @@ export default function UserManagementSearch({
                 <tr key={userData.id}>
                   <td>
                     <img
-                      src={"./images/userImage.jpg"}
+                      src={img_path + userData.small_img_path}
                       className="management-icon"
                       alt="user"
                     />
@@ -200,7 +201,7 @@ export default function UserManagementSearch({
                 <Card key={userData.id} className="text-center">
                   <Card.Header className="p-2">
                     <Card.Img
-                      src={user.avatarImage}
+                      src={img_path + userData.small_img_path}
                       variant="top"
                       className="management-icon"
                     />

@@ -18,7 +18,7 @@ export default function UserManagementAdd() {
   const [zoom, setZoom] = useState(1);
   const [cropped, setCropped] = useState(false);
   const [croppedImage, setCroppedImage] = useState("");
-  const [showModal, setShowModal] = useState(false); // State variable for showing the success modal
+  const [showModal, setShowModal] = useState(false);
 
   const handleTHNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTHName(event.target.value);
@@ -29,7 +29,6 @@ export default function UserManagementAdd() {
   };
 
   const handleCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    // Perform any necessary logic with the cropped area
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
@@ -37,7 +36,10 @@ export default function UserManagementAdd() {
     setCropped(false);
     setCroppedImage("");
   };
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -50,56 +52,38 @@ export default function UserManagementAdd() {
   };
 
   const handleFinishCropping = async () => {
-    console.log(croppedAreaPixels);
-    const croppedImageStr = await getCroppedImg(
-      image,
-      {
-        x: croppedAreaPixels.x,
-        y: croppedAreaPixels.y,
-        width: croppedAreaPixels.width,
-        height: croppedAreaPixels.height,
-      },
-      zoom
-    );
+    const croppedImageStr = await getCroppedImg(image, croppedAreaPixels, zoom);
     setCroppedImage(croppedImageStr ?? "");
     setCropped(true);
   };
-  const handleSubmit = async () => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
       if (TH_name !== "" && EN_name !== "" && croppedImage !== "") {
-        const blob = await fetch(`image/png;base64,${croppedImage}`).then(
-          (res) => res.blob()
-        );
-        const date = new Date().toISOString().split("T")[0];
-        const time = new Date().toISOString().split("T")[1].split(".")[0];
-        let times = time.replace(/[:\-]/g, "-");
-        const croppedFile = new File([blob], `${EN_name}${date}-${times}.jpg`, {
+        const blob = await fetch(croppedImage).then((res) => res.blob());
+        const croppedFile = new File([blob], `${EN_name}.jpg`, {
           type: "image/jpg",
         });
         const formData = new FormData();
         formData.append("TH_name", TH_name);
         formData.append("Eng_name", EN_name);
         formData.append("img", croppedFile);
-        const fetchData = async () => {
-          try {
-            const response = await fetch("http://127.0.0.1:8000/api/users/", {
-              method: "POST",
-              body: formData,
-            });
-            const responseData = await response.json();
-            console.log(responseData);
-            if (response.ok) {
-              setShowModal(true);
-            } else {
-              console.error("Save failed");
-              console.log(responseData);
-              alert("Save failed");
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        };
-        fetchData();
+
+        const response = await fetch("http://127.0.0.1:8000/api/users/", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          setShowModal(true);
+          setTHName("");
+          setENName("");
+          handleClearCropped();
+        } else {
+          console.error("Save failed");
+          alert("Save failed");
+        }
       } else {
         alert("Some or all inputs are empty");
       }
@@ -111,11 +95,13 @@ export default function UserManagementAdd() {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    window.location.href = "/user";
   };
+
   return (
     <Container>
       <h1 className="display-4">Add User</h1>
-      <Form className="position-relative">
+      <Form className="position-relative" onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="name">
           <Form.Label>Thai Name:</Form.Label>
           <Form.Control
@@ -146,15 +132,10 @@ export default function UserManagementAdd() {
             <br></br>
           </>
         )}
-        <Button
-          type="submit"
-          variant="primary"
-          className="mt-3"
-          onClick={handleSubmit}
-        >
+        <Button type="submit" variant="primary" className="mt-3">
           Save
         </Button>
-        {croppedImage && (
+        {cropped && (
           <Button
             variant="danger float-end"
             className="mt-3"
@@ -176,10 +157,9 @@ export default function UserManagementAdd() {
         )}
       </Form>
       {image && !cropped && (
-        <Button onClick={handleFinishCropping}>FINISH {cropped}</Button>
+        <Button onClick={handleFinishCropping}>FINISH</Button>
       )}
 
-      {/* Success Modal */}
       <ModalSuccess
         show={showModal}
         onClose={handleCloseModal}

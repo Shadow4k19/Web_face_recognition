@@ -109,13 +109,10 @@ const WebcamComponent = () => {
         }
 
         if (similarityScore >= 0.4) {
-          //console.log("ไม่ดู (Not looking)");
           return;
         } else {
-          //console.log("Do (Looking)");
           const fetchData = async () => {
             if (file) {
-              //console.log("Have image");
               try {
                 const response = await fetch(
                   "http://127.0.0.1:8000/api/face_recognition/",
@@ -127,10 +124,9 @@ const WebcamComponent = () => {
 
                 if (response.ok) {
                   const data = await response.json();
-                  setDatamap(data.result);
-                  //console.log(data.result);
-                  //console.log(datamap);
-                  //console.log("Image sent to the backend successfully");
+                  if (data) {
+                    setDatamap(data.result);
+                  }
                 } else {
                   const errorData = await response.json();
                   console.error(errorData.error);
