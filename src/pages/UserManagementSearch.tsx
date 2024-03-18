@@ -168,6 +168,7 @@ export default function UserManagementSearch({
             <thead>
               <tr>
                 <th>Avatar</th>
+                <th>Full image</th>
                 <th>EN_surname</th>
                 <th>time</th>
                 <th>date</th>
@@ -182,6 +183,13 @@ export default function UserManagementSearch({
                       src={img_path + userData.small_img_path}
                       className="management-icon"
                       alt="user"
+                    />
+                  </td>
+                  <td>
+                    <img
+                      src={img_path + userData.big_img_path}
+                      className="management-icon"
+                      alt=""
                     />
                   </td>
                   <td>{userData.Eng_name}</td>
@@ -202,6 +210,11 @@ export default function UserManagementSearch({
                   <Card.Header className="p-2">
                     <Card.Img
                       src={img_path + userData.small_img_path}
+                      variant="top"
+                      className="management-icon"
+                    />
+                    <Card.Img
+                      src={img_path + userData.big_img_path}
                       variant="top"
                       className="management-icon"
                     />
