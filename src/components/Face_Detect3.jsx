@@ -108,7 +108,7 @@ const WebcamComponent = () => {
           //console.log("Similarity Score:", similarityScore);
         }
 
-        if (similarityScore >= 0.4) {
+        if (similarityScore >= 0.7) {
           return;
         } else {
           const fetchData = async () => {
@@ -197,7 +197,7 @@ const WebcamComponent = () => {
   }, [setDatamap]);
 
   useEffect(() => {}, [datamap]);
-
+  console.log(datamap.length);
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />

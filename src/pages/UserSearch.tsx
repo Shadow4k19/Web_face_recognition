@@ -19,7 +19,11 @@ export default function UserSearch() {
     setENName(event.target.value);
   };
 
-  const handleDelete = async (userId: number, Th_name: string) => {
+  const handleDelete = async (
+    userId: number,
+    Th_name: string,
+    Eng_name: string
+  ) => {
     const confirm = window.confirm(
       `Are you sure you want to delete ${Th_name}`
     );
@@ -30,7 +34,7 @@ export default function UserSearch() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ id: userId }),
+          body: JSON.stringify({ id: userId, Eng_name: Eng_name }),
         });
 
         if (response.ok) {
@@ -122,7 +126,9 @@ export default function UserSearch() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(user.id, user.TH_name)}
+                    onClick={() =>
+                      handleDelete(user.id, user.TH_name, user.Eng_name)
+                    }
                   >
                     Delete
                   </Button>

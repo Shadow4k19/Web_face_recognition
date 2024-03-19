@@ -72,6 +72,9 @@ export default function MessageSearch({ onEdit }: MessageSearchProps) {
         <Form.Group className="mb-3" controlId="surname">
           <Form.Label>Types</Form.Label>
           <Form.Select value={type} onChange={(e) => setType(e.target.value)}>
+            <option value="Disgust">Disgust</option>
+            <option value="Fear">Fear</option>
+            <option value="Surprise">Surprise</option>
             <option value="Happy">Happy</option>
             <option value="Angry">Angry</option>
             <option value="Sad">Sad</option>
