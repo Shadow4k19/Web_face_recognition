@@ -40,24 +40,30 @@ export default function UserManagementSearch({
   const [time_start, setTimestart] = useState("");
   const [time_end, setTimeEnd] = useState("");
   const [date, setDate] = useState("");
-  const [image, setImage] = useState<FileList | null>(null);
+  const [image, setImage] = useState<File | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    setImage(files !== null ? files : null);
+    const file = e.target.files?.[0];
+    setImage(file !== undefined ? file : null);
   };
+
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
+    const formData = new FormData();
+    formData.append("Eng_name", EN_name);
+    formData.append("time_start", time_start);
+    formData.append("time_end", time_end);
+    formData.append("date", date);
+    if (image) {
+      formData.append("image", image);
+    } else {
+      formData.append("image", "");
+    }
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/face-detect/?Eng_name=${EN_name}&time_start=${time_start}&time_end=${time_end}&image=${image}&date=${date}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://127.0.0.1:8000/api/face-detect/`, {
+        method: "POST",
+        body: formData,
+      });
 
       const responseData = await response.json();
       if (response.ok) {
@@ -102,7 +108,7 @@ export default function UserManagementSearch({
           <Row className="mt-4">
             <Col>
               <Form.Group controlId="time_start">
-                <Form.Label>Time start</Form.Label>
+                <Form.Label>Date</Form.Label>
                 <Form.Control
                   type="date"
                   value={date}
@@ -133,8 +139,8 @@ export default function UserManagementSearch({
           </Row>
           <Col>
             <Form.Group controlId="image">
-              <Form.Label>Image (Out of Service)</Form.Label>
-              <Form.Control type="file" onChange={handleImageChange} disabled />
+              <Form.Label>Image</Form.Label>
+              <Form.Control type="file" onChange={handleImageChange} />
             </Form.Group>
           </Col>
           <Row className="my-4">

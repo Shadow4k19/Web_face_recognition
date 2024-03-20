@@ -112,7 +112,7 @@ const WebcamComponent = () => {
           return;
         } else {
           const fetchData = async () => {
-            if (file) {
+            if (formData) {
               try {
                 const response = await fetch(
                   "http://127.0.0.1:8000/api/face_recognition/",
@@ -197,7 +197,6 @@ const WebcamComponent = () => {
   }, [setDatamap]);
 
   useEffect(() => {}, [datamap]);
-  console.log(datamap.length);
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />

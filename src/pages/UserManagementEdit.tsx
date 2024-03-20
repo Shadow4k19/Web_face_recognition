@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 export default function UserManagementEdit() {
   const [TH_name, setTHName] = useState("");
   const [EN_name, setENName] = useState("");
+  const [imgpath, setPath] = useState("");
   const [image, setImage] = useState("");
   const { id } = useParams();
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
@@ -70,18 +71,28 @@ export default function UserManagementEdit() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      const formData = new FormData();
+      /*const blob = await fetch(croppedImage).then((res) => res.blob());
+      const croppedFile = new File([blob], `${EN_name}.jpg`, {
+        type: "image/jpg",
+      });*/
+      if (id) {
+        formData.append("id", id);
+      }
+      formData.append("TH_name", TH_name);
+      formData.append("Eng_name", EN_name);
+      formData.append("Folder_img_path", imgpath);
+      //formData.append("image", croppedFile);
+
       const response = await fetch(`http://127.0.0.1:8000/api/users/`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: id, TH_name: TH_name, Eng_name: EN_name }),
+        body: formData,
       });
+
       const responseData = await response.json();
+
       if (response.ok) {
-        alert("Update Complete");
         setShowModal(true);
-        window.location.href = "/user";
       } else {
         alert(responseData.error);
         console.log(responseData.error);
@@ -93,6 +104,7 @@ export default function UserManagementEdit() {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    window.location.href = "/user";
   };
 
   useEffect(() => {
@@ -115,6 +127,7 @@ export default function UserManagementEdit() {
           console.log(data);
           setTHName(data[0].TH_name);
           setENName(data[0].Eng_name);
+          setPath(data[0].Folder_img_path);
         }
       } catch (error) {
         console.error(error);
@@ -145,7 +158,7 @@ export default function UserManagementEdit() {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="image">
-          <Form.Label>Image:</Form.Label>
+          <Form.Label>Image:(Out of service)</Form.Label>
           <Form.Control
             type="file"
             accept="image/*"
