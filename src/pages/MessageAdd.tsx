@@ -53,6 +53,7 @@ export default function MessageAdd() {
             <option value="Disgust">Disgust</option>
             <option value="Fear">Fear</option>
             <option value="Surprise">Surprise</option>
+            <option value="Neutral">Neutral</option>
             <option value="Happy">Happy</option>
             <option value="Angry">Angry</option>
             <option value="Sad">Sad</option>

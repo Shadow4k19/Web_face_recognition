@@ -1,13 +1,14 @@
 body {
   padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
+  margin: 0;  
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 canvas {
+  align-self: self-start;
+  padding-top: 7.4%;
   position: absolute;
+  z-index: 9999;
 }
