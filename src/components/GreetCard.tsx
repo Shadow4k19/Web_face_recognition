@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 
 const GreetCard = ({ person }: { person: any }) => {
-  const { emotion, name, text,path } = person;
+  const { emotion, name, text, path } = person;
   const img_path = "http://127.0.0.1:8000/static/img";
   return (
     <Card className="m-3">
