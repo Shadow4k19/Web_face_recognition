@@ -129,10 +129,12 @@ const WebcamComponent = () => {
                     setDatamap(prevDatamap => {
                       const newDatamap = [...prevDatamap, ...data.result];
                       if (newDatamap.length > 3) {
-                        return newDatamap.slice(newDatamap.length - 3);
+                        let x = datamap.length - 3
+                        return newDatamap.slice(datamap.length - x);
                       } else {
                         return newDatamap;
                       }
+                      //setDatamap(data.result)
                     });
                   }
                 } else {
@@ -207,7 +209,7 @@ const WebcamComponent = () => {
       }
     };
   }, [setDatamap,datamap.length]);
-
+  console.log(datamap)
   useEffect(() => {}, [datamap]);
   return (
     <div id="detect-container" className="body-detect">

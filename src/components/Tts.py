@@ -5,13 +5,13 @@ import pyttsx3
 engine = pyttsx3.init()
 
 #รอหาภาษาไทยมาลง
-# TH_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_THAI"
-EN_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+TH_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_THAI"
+# EN_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
 
 engine.setProperty('volume', 0.9)  # Volume 0-1
 engine.setProperty('rate', 120)  # Speaking rate
 
-engine.setProperty('voice', EN_voice_id)
+engine.setProperty('voice', TH_voice_id)
 
 def speak_text(text):
     engine.say(str(text))
