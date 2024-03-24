@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 
 const GreetCard = ({ person }: { person: any }) => {
-  const { emotion, name, text,path } = person;
+  const { emotion, name, text, path } = person;
   const img_path = "http://127.0.0.1:8000/static/img";
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8765");
+
+    socket.onopen = () => {
+      console.log('WebSocket connection established');
+      
+      const message = JSON.stringify( text );
+      socket.send(message);
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [text]); 
+
   return (
     <Card className="m-3">
       <Row>

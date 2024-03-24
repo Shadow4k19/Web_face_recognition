@@ -3,7 +3,7 @@ import { Container, Form, Button, Modal, Row, Col } from "react-bootstrap";
 
 export default function MessageAdd() {
   const [msg, setMsg] = useState("");
-  const [type, setType] = useState("All");
+  const [type, setType] = useState("Happy");
   const [error, setError] = useState("");
 
   const handleSave = async () => {
@@ -57,7 +57,6 @@ export default function MessageAdd() {
             <option value="Happy">Happy</option>
             <option value="Angry">Angry</option>
             <option value="Sad">Sad</option>
-            <option value="">All</option>
           </Form.Select>
         </Form.Group>
       </Row>

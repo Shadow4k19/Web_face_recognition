@@ -86,7 +86,6 @@ export default function MessageEdit() {
             <option value="Happy">Happy</option>
             <option value="Angry">Angry</option>
             <option value="Sad">Sad</option>
-            <option value="">All</option>
           </Form.Select>
         </Form.Group>
       </Row>
