@@ -126,16 +126,18 @@ const WebcamComponent = () => {
                 if (response.ok) {
                   const data = await response.json();
                   if (data) {
-                    setDatamap(prevDatamap => {
+                    /*setDatamap(prevDatamap => {
                       const newDatamap = [...prevDatamap, ...data.result];
+                      console.log(newDatamap)
                       if (newDatamap.length > 3) {
-                        let x = datamap.length - 3
-                        return newDatamap.slice(datamap.length - x);
+                        // let x = datamap.length - 3
+                        return newDatamap.slice(datamap.length - 3);
                       } else {
                         return newDatamap;
                       }
                       //setDatamap(data.result)
-                    });
+                    });*/
+                    setDatamap(data.result)
                   }
                 } else {
                   const errorData = await response.json();

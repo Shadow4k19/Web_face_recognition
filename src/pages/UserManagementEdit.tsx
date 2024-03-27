@@ -72,17 +72,17 @@ export default function UserManagementEdit() {
     event.preventDefault();
     try {
       const formData = new FormData();
-      /*const blob = await fetch(croppedImage).then((res) => res.blob());
+      const blob = await fetch(croppedImage).then((res) => res.blob());
       const croppedFile = new File([blob], `${EN_name}.jpg`, {
         type: "image/jpg",
-      });*/
+      });
       if (id) {
         formData.append("id", id);
       }
       formData.append("TH_name", TH_name);
       formData.append("Eng_name", EN_name);
       formData.append("Folder_img_path", imgpath);
-      //formData.append("image", croppedFile);
+      formData.append("image", croppedFile);
 
       const response = await fetch(`http://127.0.0.1:8000/api/users/`, {
         method: "PUT",
@@ -158,12 +158,11 @@ export default function UserManagementEdit() {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="image">
-          <Form.Label>Image:(Out of service)</Form.Label>
+          <Form.Label>Image:</Form.Label>
           <Form.Control
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            disabled
           />
         </Form.Group>
         {croppedImage && (
