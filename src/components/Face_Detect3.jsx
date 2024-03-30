@@ -10,7 +10,7 @@ const WebcamComponent = () => {
   const [datamap, setDatamap] = useState([]);
   const canSendRequest = useRef(true);
   const canvas = document.createElement("canvas");
-  const canvasAppended = useRef(false);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -63,6 +63,14 @@ const WebcamComponent = () => {
             if (canSendRequest.current === false) {
               Change();
             }
+          }else{
+            timeoutRef.current = setTimeout(() => {
+              prevCanvasRef.current = null;
+              canSendRequest.current = false
+              if (canSendRequest.current === false) {
+                Change();
+              }
+            }, 3000);
           }
         }, 3000);
         const Change = () => {
@@ -106,10 +114,10 @@ const WebcamComponent = () => {
 
         if (prevBlob) {
           similarityScore = await calculateImageSimilarity(blob, prevBlob);
-          //console.log("Similarity Score:", similarityScore);
+          console.log("Similarity Score:", similarityScore);
         }
 
-        if (similarityScore >= 0.5) {
+        if (similarityScore >= 0.7) {
           return;
         } else {
           const fetchData = async () => {
@@ -140,9 +148,9 @@ const WebcamComponent = () => {
                     setDatamap(data.result)
                   }
                 } else {
-                  const errorData = await response.json();
+                 /* const errorData = await response.json();
                   console.error(errorData.error);
-                  console.error("Failed to send image to the backend");
+                  console.error("Failed to send image to the backend");*/
                 }
               } catch (error) {
                 console.error("Error sending image to the backend:", error);
@@ -210,15 +218,15 @@ const WebcamComponent = () => {
         document.body.removeChild(canvas);
       }
     };
-  }, [setDatamap,datamap.length]);
-  console.log(datamap)
+  }, []);
+  //console.log(datamap)
   useEffect(() => {}, [datamap]);
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
       <canvas id="canvas" />
       <Row>
-        <Container>
+        <Container className="container-card">
           {datamap.length > 0 ? (
             datamap.reverse().map((person, index) => (
               <GreetCard 
