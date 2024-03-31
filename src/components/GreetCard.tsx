@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 
 const GreetCard = ({ person }: { person: any }) => {
   const { emotion, name, text, path } = person;
   const img_path = "http://127.0.0.1:8000/static/img";
+  const [spokenText, setSpokenText] = useState<string | null>(null);
 
   useEffect(() => {
     const socket = new WebSocket("ws://localhost:8765");
@@ -12,7 +13,7 @@ const GreetCard = ({ person }: { person: any }) => {
     socket.onopen = () => {
       console.log('WebSocket connection established');
       
-      const message = JSON.stringify( text );
+      const message = JSON.stringify(text);
       socket.send(message);
     };
 
@@ -23,13 +24,19 @@ const GreetCard = ({ person }: { person: any }) => {
     return () => {
       socket.close();
     };
-  }, [text]); 
+  }, [text]);
+
+  /*useEffect(() => {
+    if (spokenText !== null && text !== spokenText) {
+      setSpokenText(text);
+    }
+  }, [text, spokenText]);*/
 
   return (
     <Card className="m-3">
       <Row>
         <Col xs={"auto"}>
-          <Card.Img src={img_path + path} className="avatar rounded" />
+          <Card.Img src={img_path + path} className="avatar rounded card-img" />
         </Col>
         <Col>
           <Card.Body>

@@ -77,3 +77,8 @@
   padding: 3px;
   justify-content: space-between;
 }
+
+.card-img{
+  width: 150px;
+  height: 150px;
+}

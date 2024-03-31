@@ -8,11 +8,23 @@ const WebcamComponent = () => {
   const videoRef = useRef(null);
   const prevCanvasRef = useRef(null);
   const [datamap, setDatamap] = useState([]);
+  const [revdata, setRevdata] = useState([]);
   const canSendRequest = useRef(true);
   const canvas = document.createElement("canvas");
   const timeoutRef = useRef(null);
 
   useEffect(() => {
+    const Change = () => {
+      canSendRequest.current = true;
+    };
+
+    const handleTimeout = () => {
+      console.log("change")
+      prevCanvasRef.current = null;
+      canSendRequest.current = false;
+      Change();
+    };
+
     const loadModels = async () => {
       await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
@@ -59,26 +71,13 @@ const WebcamComponent = () => {
           faceapi.draw.drawDetections(canvas, resizedDetections);
           if (detections.length > 0 && canSendRequest.current) {
             await saveAndSendImage(video);
-            canSendRequest.current = false;
-            if (canSendRequest.current === false) {
-              Change();
-            }
+            clearTimeout(timeoutRef.current);
           }else{
-            timeoutRef.current = setTimeout(() => {
-              prevCanvasRef.current = null;
-              canSendRequest.current = false
-              if (canSendRequest.current === false) {
-                Change();
-              }
-            }, 3000);
+            if(prevCanvasRef.current != null && detections.length === 0){
+              timeoutRef.current = setTimeout(handleTimeout, 3000);
+          }
           }
         }, 3000);
-        const Change = () => {
-          setTimeout(() => {
-            //console.log("Change");
-            canSendRequest.current = true;
-          }, 3000);
-        };
       }
     };
 
@@ -114,12 +113,13 @@ const WebcamComponent = () => {
 
         if (prevBlob) {
           similarityScore = await calculateImageSimilarity(blob, prevBlob);
-          console.log("Similarity Score:", similarityScore);
+          //console.log("Similarity Score:", similarityScore);
         }
 
         if (similarityScore >= 0.7) {
           return;
         } else {
+          //console.log("send")
           const fetchData = async () => {
             if (formData) {
               try {
@@ -134,6 +134,7 @@ const WebcamComponent = () => {
                 if (response.ok) {
                   const data = await response.json();
                   if (data) {
+                    //console.log(datamap)
                     /*setDatamap(prevDatamap => {
                       const newDatamap = [...prevDatamap, ...data.result];
                       console.log(newDatamap)
@@ -143,7 +144,6 @@ const WebcamComponent = () => {
                       } else {
                         return newDatamap;
                       }
-                      //setDatamap(data.result)
                     });*/
                     setDatamap(data.result)
                   }
@@ -220,7 +220,10 @@ const WebcamComponent = () => {
     };
   }, []);
   //console.log(datamap)
-  useEffect(() => {}, [datamap]);
+  /*useEffect(() => {
+    setRevdata(datamap);
+  }, [datamap]);*/
+  //console.log(datamap)
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
@@ -228,7 +231,7 @@ const WebcamComponent = () => {
       <Row>
         <Container className="container-card">
           {datamap.length > 0 ? (
-            datamap.reverse().map((person, index) => (
+            datamap.map((person, index) => (
               <GreetCard 
               person={person} 
               key={index}

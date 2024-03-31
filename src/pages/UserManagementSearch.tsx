@@ -187,7 +187,7 @@ export default function UserManagementSearch({
                   <td>
                     <img
                       src={img_path + userData.small_img_path}
-                      className="management-icon"
+                      className="management-icon card-img"
                       alt="user"
                     />
                   </td>
@@ -217,7 +217,7 @@ export default function UserManagementSearch({
                     <Card.Img
                       src={img_path + userData.small_img_path}
                       variant="top"
-                      className="management-icon"
+                      className="management-icon card-img"
                     />
                     <Card.Img
                       src={img_path + userData.big_img_path}
