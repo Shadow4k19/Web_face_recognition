@@ -19,7 +19,7 @@ const WebcamComponent = () => {
     };
 
     const handleTimeout = () => {
-      console.log("change")
+      console.log("change");
       prevCanvasRef.current = null;
       canSendRequest.current = false;
       Change();
@@ -54,7 +54,7 @@ const WebcamComponent = () => {
           width: video.videoWidth,
           height: video.videoHeight,
         };
-        document.body.append(canvas)
+        document.body.append(canvas);
         faceapi.matchDimensions(canvas, displaySize);
 
         setInterval(async () => {
@@ -72,10 +72,10 @@ const WebcamComponent = () => {
           if (detections.length > 0 && canSendRequest.current) {
             await saveAndSendImage(video);
             clearTimeout(timeoutRef.current);
-          }else{
-            if(prevCanvasRef.current != null && detections.length === 0){
+          } else {
+            if (prevCanvasRef.current != null && detections.length === 0) {
               timeoutRef.current = setTimeout(handleTimeout, 5000);
-          }
+            }
           }
         }, 3000);
       }
@@ -135,11 +135,11 @@ const WebcamComponent = () => {
                   const data = await response.json();
                   if (data) {
                     //console.log(datamap)
-                    setDatamap(prevDatamap => {
+                    setDatamap((prevDatamap) => {
                       const newDatamap = [...prevDatamap, ...data.result];
                       if (newDatamap.length > 3) {
                         // let x = datamap.length - 3
-                        console.log("Do")
+                        console.log("Do");
                         return newDatamap.slice(datamap.length - 3);
                       } else {
                         return newDatamap;
@@ -149,7 +149,7 @@ const WebcamComponent = () => {
                     //setDatamap(data.result)
                   }
                 } else {
-                 /* const errorData = await response.json();
+                  /* const errorData = await response.json();
                   console.error(errorData.error);
                   console.error("Failed to send image to the backend");*/
                 }
@@ -159,8 +159,8 @@ const WebcamComponent = () => {
             }
           };
           fetchData();
-          setUsetts();
-          setRevdata(datamap)
+          //setUsetts();
+          setRevdata(datamap);
           prevCanvasRef.current = blob;
         }
       }
@@ -221,46 +221,46 @@ const WebcamComponent = () => {
       if (canvas && canvas.parentElement === document.body) {
         document.body.removeChild(canvas);
       }
+      if (datamap.length > 0) {
+        setUsetts();
+      }
     };
   }, []);
   //console.log(datamap)
   /*useEffect(() => {
-    if(datamap.length > 0){
-    setRevdata(datamap);
-    setUsetts();
+    if (datamap.length > 0) {
+      setRevdata(datamap);
+      setUsetts();
     }
   }, [datamap.length]);*/
   //console.log(datamap)
   const setUsetts = () => {
-    console.log("called")
-    const newDataMap = datamap.map(item => {
+    console.log("called");
+    const newDataMap = datamap.map((item) => {
       if (!item.useTts) {
         return { ...item, useTts: true };
       }
       return item;
     });
-  
+
     setDatamap(newDataMap);
-  };  
-  
+  };
+
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
       <canvas id="canvas" />
       <Row>
         <Container className="container-card">
-        {datamap.length > 0 ? (
-          <>
-            {datamap.map((person, index) => (
-              <GreetCard 
-                person={person} 
-                key={index}
-              />
-            ))}
-          </>
-        ) : (
-          <p></p>
-        )}
+          {datamap.length > 0 ? (
+            <>
+              {datamap.map((person, index) => (
+                <GreetCard person={person} key={index} />
+              ))}
+            </>
+          ) : (
+            <p></p>
+          )}
         </Container>
       </Row>
     </div>
