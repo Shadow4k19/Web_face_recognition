@@ -11,14 +11,14 @@ const GreetCard = ({ person }: { person: any }) => {
     const socket = new WebSocket("ws://localhost:8765");
 
     socket.onopen = () => {
-      console.log('WebSocket connection established');
+      //console.log('WebSocket connection established');
       
       const message = JSON.stringify(text);
       socket.send(message);
     };
 
     socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      //console.error('WebSocket error:', error);
     };
 
     return () => {

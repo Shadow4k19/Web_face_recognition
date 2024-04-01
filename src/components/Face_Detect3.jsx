@@ -19,7 +19,7 @@ const WebcamComponent = () => {
     };
 
     const handleTimeout = () => {
-      console.log("change")
+      //console.log("change")
       prevCanvasRef.current = null;
       canSendRequest.current = false;
       Change();
@@ -139,7 +139,6 @@ const WebcamComponent = () => {
                       const newDatamap = [...prevDatamap, ...data.result];
                       if (newDatamap.length > 3) {
                         // let x = datamap.length - 3
-                        console.log("Do")
                         return newDatamap.slice(datamap.length - 3);
                       } else {
                         return newDatamap;
@@ -159,7 +158,7 @@ const WebcamComponent = () => {
             }
           };
           fetchData();
-          setUsetts();
+          //setUsetts();
           setRevdata(datamap)
           prevCanvasRef.current = blob;
         }
@@ -224,25 +223,24 @@ const WebcamComponent = () => {
     };
   }, []);
   //console.log(datamap)
-  /*useEffect(() => {
+  useEffect(() => {
     if(datamap.length > 0){
+    //console.log("1")
     setRevdata(datamap);
     setUsetts();
     }
-  }, [datamap.length]);*/
+  }, [JSON.stringify(datamap)]);
   //console.log(datamap)
   const setUsetts = () => {
-    console.log("called")
     const newDataMap = datamap.map(item => {
+      //console.log("called")
       if (!item.useTts) {
         return { ...item, useTts: true };
       }
       return item;
     });
-  
     setDatamap(newDataMap);
-  };  
-  
+  };
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
