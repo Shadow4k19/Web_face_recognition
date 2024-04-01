@@ -19,7 +19,7 @@ const WebcamComponent = () => {
     };
 
     const handleTimeout = () => {
-      console.log("change")
+      //console.log("change")
       prevCanvasRef.current = null;
       canSendRequest.current = false;
       Change();
@@ -139,7 +139,7 @@ const WebcamComponent = () => {
                       const newDatamap = [...prevDatamap, ...data.result];
                       if (newDatamap.length > 3) {
                         // let x = datamap.length - 3
-                        console.log("Do")
+                        //console.log("Do")
                         return newDatamap.slice(datamap.length - 3);
                       } else {
                         return newDatamap;
@@ -159,7 +159,6 @@ const WebcamComponent = () => {
             }
           };
           fetchData();
-          setUsetts();
           setRevdata(datamap)
           prevCanvasRef.current = blob;
         }
@@ -221,9 +220,6 @@ const WebcamComponent = () => {
       if (canvas && canvas.parentElement === document.body) {
         document.body.removeChild(canvas);
       }
-      if (datamap.length > 0) {
-        setUsetts();
-      }
     };
   }, []);
   //console.log(datamap)
@@ -235,7 +231,6 @@ const WebcamComponent = () => {
   }, [JSON.stringify(datamap)]);
   //console.log(datamap)
   const setUsetts = () => {
-    console.log("called")
     const newDataMap = datamap.map(item => {
       if (!item.useTts) {
         return { ...item, useTts: true };
