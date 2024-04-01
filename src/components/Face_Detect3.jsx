@@ -74,7 +74,7 @@ const WebcamComponent = () => {
             clearTimeout(timeoutRef.current);
           }else{
             if(prevCanvasRef.current != null && detections.length === 0){
-              timeoutRef.current = setTimeout(handleTimeout, 3000);
+              timeoutRef.current = setTimeout(handleTimeout, 5000);
           }
           }
         }, 3000);
@@ -135,17 +135,18 @@ const WebcamComponent = () => {
                   const data = await response.json();
                   if (data) {
                     //console.log(datamap)
-                    /*setDatamap(prevDatamap => {
+                    setDatamap(prevDatamap => {
                       const newDatamap = [...prevDatamap, ...data.result];
-                      console.log(newDatamap)
                       if (newDatamap.length > 3) {
                         // let x = datamap.length - 3
+                        console.log("Do")
                         return newDatamap.slice(datamap.length - 3);
                       } else {
                         return newDatamap;
                       }
-                    });*/
-                    setDatamap(data.result)
+                    });
+                    //setUsetts();
+                    //setDatamap(data.result)
                   }
                 } else {
                  /* const errorData = await response.json();
@@ -158,6 +159,8 @@ const WebcamComponent = () => {
             }
           };
           fetchData();
+          setUsetts();
+          setRevdata(datamap)
           prevCanvasRef.current = blob;
         }
       }
@@ -213,6 +216,7 @@ const WebcamComponent = () => {
 
     loadModels();
     detectAndDraw();
+    //setUsetts();
     return () => {
       if (canvas && canvas.parentElement === document.body) {
         document.body.removeChild(canvas);
@@ -221,25 +225,42 @@ const WebcamComponent = () => {
   }, []);
   //console.log(datamap)
   /*useEffect(() => {
+    if(datamap.length > 0){
     setRevdata(datamap);
-  }, [datamap]);*/
+    setUsetts();
+    }
+  }, [datamap.length]);*/
   //console.log(datamap)
+  const setUsetts = () => {
+    console.log("called")
+    const newDataMap = datamap.map(item => {
+      if (!item.useTts) {
+        return { ...item, useTts: true };
+      }
+      return item;
+    });
+  
+    setDatamap(newDataMap);
+  };  
+  
   return (
     <div id="detect-container" className="body-detect">
       <video ref={videoRef} autoPlay playsInline muted />
       <canvas id="canvas" />
       <Row>
         <Container className="container-card">
-          {datamap.length > 0 ? (
-            datamap.map((person, index) => (
+        {datamap.length > 0 ? (
+          <>
+            {datamap.map((person, index) => (
               <GreetCard 
-              person={person} 
-              key={index}
-            />
-            ))
-          ) : (
-            <p></p>
-          )}
+                person={person} 
+                key={index}
+              />
+            ))}
+          </>
+        ) : (
+          <p></p>
+        )}
         </Container>
       </Row>
     </div>

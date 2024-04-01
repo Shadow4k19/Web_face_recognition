@@ -3,11 +3,11 @@ import { Card, Col, Row } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 
 const GreetCard = ({ person }: { person: any }) => {
-  const { emotion, name, text, path } = person;
+  const { emotion, name, text, path ,useTts} = person;
   const img_path = "http://127.0.0.1:8000/static/img";
-  const [spokenText, setSpokenText] = useState<string | null>(null);
 
   useEffect(() => {
+    if(useTts === false){
     const socket = new WebSocket("ws://localhost:8765");
 
     socket.onopen = () => {
@@ -24,13 +24,9 @@ const GreetCard = ({ person }: { person: any }) => {
     return () => {
       socket.close();
     };
+  }
   }, [text]);
 
-  /*useEffect(() => {
-    if (spokenText !== null && text !== spokenText) {
-      setSpokenText(text);
-    }
-  }, [text, spokenText]);*/
 
   return (
     <Card className="m-3">
