@@ -13,6 +13,7 @@ import AdminManagementEdit from "./pages/AdminManagementEdit";
 import MessageEdit from "./pages/MessageEdit";
 import UserManagementEdit from "./pages/UserManagementEdit";
 import user from './components/User'
+import Settingall from "./pages/SettingAll";
 
 interface Props {
   currentPath: string;
@@ -28,7 +29,8 @@ const App: React.FC<Props> = ({ currentPath }) => {
         {user.getStatus() === "true" &&(
           <>
         <Route path="/manage" element={<Management />} />
-        <Route path="/setting" element={<Setting />} />
+        <Route path="/message" element={<Setting />} />
+        <Route path="/setting" element={<Settingall />} />
         <Route path="/user" element={<UserManagement />} />
         <Route path="/admin" element={<AdminManagement />} />
         <Route path="/admin/add" element={<AdminManagementAdd />} />

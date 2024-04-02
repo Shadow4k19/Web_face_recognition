@@ -123,3 +123,25 @@
 .Navbar{
   background-color: #61dafb;
 }
+
+.container-message{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30px;
+}
+
+.message-setting label,
+.message-setting button {
+    display: block;
+    width: 100%;
+}
+
+.btn-move {
+  width: auto;
+  padding-top: 50px;
+}
+
+.btn{
+  width: 320px;
+}

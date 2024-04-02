@@ -72,7 +72,9 @@ const WebcamComponent = () => {
           faceapi.draw.drawDetections(canvas, resizedDetections);
           if (detections.length > 0 && canSendRequest.current) {
             await saveAndSendImage(video);
+            if(timeoutRef.current != null){
             clearTimeout(timeoutRef.current);
+            }
           } else {
             if (prevCanvasRef.current != null && detections.length === 0) {
               timeoutRef.current = setTimeout(handleTimeout, 5000);
