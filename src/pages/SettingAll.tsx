@@ -40,7 +40,7 @@ export default function Settingall() {
               </Form.Group>
             </Row>
             <Row className="container-message">
-              <Button variant="primary" className="mb-2 btn">Save Setting</Button>
+              <Button variant="primary" className="mb-2 btn-save-setting">Save Setting</Button>
             </Row>
             <Row>
               <Container className="container-message">
