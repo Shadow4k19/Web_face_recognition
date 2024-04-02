@@ -13,7 +13,7 @@ export default function Settingall() {
   const [rate, setRate] = useState("120");
 
   return (
-    <div className="container-all">
+    <div className="container-setting">
       <Container fluid={true} className="p-4">
         <Tabs defaultActiveKey="Setting" id="setting-tab" className="mb-3">
           <Tab eventKey="Setting" title="Setting" className="p-2">

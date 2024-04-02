@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 
 const GreetCard = ({ person }: { person: any }) => {
@@ -29,7 +29,8 @@ const GreetCard = ({ person }: { person: any }) => {
 
 
   return (
-    <Card className="m-3">
+    <Container className="container-greet">
+    <Card className="m-3 greet-card">
       <Row>
         <Col xs={"auto"}>
           <Card.Img src={img_path + path} className="avatar rounded card-img" />
@@ -45,6 +46,7 @@ const GreetCard = ({ person }: { person: any }) => {
         </Col>
       </Row>
     </Card>
+    </Container>
   );
 };
 

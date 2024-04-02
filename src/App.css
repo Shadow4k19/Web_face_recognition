@@ -97,6 +97,16 @@
   width: 1237px;
 }
 
+.container-setting{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5% ;
+  height: 100vh;
+  width: 1400px;
+  max-width: 1500px;
+}
+
 .table-all{
   padding-top: 5%;
 }
@@ -144,4 +154,18 @@
 
 .btn-save-setting{
   width: 320px;
+}
+
+#root{
+  width: 100%;
+}
+
+.greet-card{
+  width: 640px;
+}
+
+.container-greet{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

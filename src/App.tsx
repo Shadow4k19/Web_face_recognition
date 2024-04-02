@@ -14,6 +14,7 @@ import MessageEdit from "./pages/MessageEdit";
 import UserManagementEdit from "./pages/UserManagementEdit";
 import user from './components/User'
 import Settingall from "./pages/SettingAll";
+import MyNav from "./components/MyNav";
 
 interface Props {
   currentPath: string;
@@ -22,7 +23,7 @@ interface Props {
 const App: React.FC<Props> = ({ currentPath }) => {
   return (
     <BrowserRouter>
-    {/*currentPath !== "" && currentPath!== "/" && currentPath !== "/login" ? <MyNav /> : null*/}
+    {currentPath !== "" && currentPath!== "/" && currentPath !== "/login" ? <MyNav /> : null}
       <Routes>
         <Route path="/" element={<Home persons={[{ avatarImage: "./images/userImage.jpg", moodImage: "./images/moods/cool.png", text: "Hello ____ you seem happy today" }]}/>} />
         <Route path="/login" element={<Login />} />
