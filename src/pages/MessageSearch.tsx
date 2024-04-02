@@ -54,7 +54,7 @@ export default function MessageSearch({ onEdit }: MessageSearchProps) {
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <h1 className="display-4">Message search</h1>
       </Row>

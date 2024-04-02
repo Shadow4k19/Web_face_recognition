@@ -138,7 +138,7 @@ export default function UserManagementEdit() {
   }, [id]);
 
   return (
-    <Container>
+    <Container className="container-all">
       <h1 className="display-4">Edit User</h1>
       <Form onSubmit={handleSubmit} className="position-relative">
         <Form.Group className="mb-3" controlId="name">

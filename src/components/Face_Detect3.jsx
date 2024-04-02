@@ -55,6 +55,7 @@ const WebcamComponent = () => {
           height: video.videoHeight,
         };
         document.body.append(canvas);
+        canvas.classList.add("duck-canvas");
         faceapi.matchDimensions(canvas, displaySize);
 
         setInterval(async () => {
@@ -243,8 +244,10 @@ const WebcamComponent = () => {
   
   return (
     <div id="detect-container" className="body-detect">
-      <video ref={videoRef} autoPlay playsInline muted />
+      <Container className="video-display">
+      <video ref={videoRef} className="video-show"autoPlay playsInline muted />
       <canvas id="canvas" />
+      </Container>
       <Row>
         <Container className="container-card">
           {datamap.length > 0 ? (

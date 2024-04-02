@@ -83,7 +83,7 @@ export default function AdminManagement() {
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <h1 className="display-6">Admin management</h1>
       </Row>
@@ -105,7 +105,7 @@ export default function AdminManagement() {
           </Col>
         </Row>
       </Row>
-      <Row>
+      <Row className="table-all">
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -128,6 +128,7 @@ export default function AdminManagement() {
                 <td>
                   <Button
                     variant="primary"
+                    className="me-2"
                     onClick={() => handleEdit(user.Username)}
                   >
                     Edit
@@ -144,7 +145,6 @@ export default function AdminManagement() {
           </tbody>
         </Table>
       </Row>
-      <BackButton></BackButton>
     </Container>
   );
 }

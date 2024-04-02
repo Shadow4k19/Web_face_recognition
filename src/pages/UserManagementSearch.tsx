@@ -90,7 +90,7 @@ export default function UserManagementSearch({
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <h1 className="display-4">Search user</h1>
       </Row>
@@ -168,7 +168,7 @@ export default function UserManagementSearch({
           </Button>
         </Col>
       </Row>
-      <Row>
+      <Row className="p-2">
         {view === "table" && user && (
           <Table striped bordered hover>
             <thead>
@@ -209,10 +209,10 @@ export default function UserManagementSearch({
         )}
 
         {view === "card" && user && (
-          <Container>
-            <Row>
+          <Container className="p-2">
+            <Row xs={1} md={2} lg={4} className="g-4 card-display">
               {fetchData.map((userData) => (
-                <Card key={userData.id} className="text-center">
+                <Card key={userData.id} className="text-center card-display">
                   <Card.Header className="p-2">
                     <Card.Img
                       src={img_path + userData.small_img_path}

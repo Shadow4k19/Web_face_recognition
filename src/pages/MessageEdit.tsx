@@ -63,7 +63,7 @@ export default function MessageEdit() {
     }
   };
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <h1 className="display-4">Message Edit</h1>
       </Row>

@@ -8,7 +8,7 @@ import {
   Col,
   Alert,
 } from "react-bootstrap";
-import MyNav from "../components/MyNav";
+import user from '../components/User'
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -36,6 +36,8 @@ export default function Login() {
       if (response.ok) {
         console.log("Login successful");
         alert("Login successful");
+        user.setUsername(username);
+        user.setLoginStatus("true");
         window.location.href = "/manage";
       } else {
         console.error("Login failed");
@@ -51,7 +53,7 @@ export default function Login() {
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <Container className="p-5">
           <Row className="d-flex justify-content-center align-items-center">

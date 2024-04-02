@@ -82,3 +82,44 @@
   width: 150px;
   height: 150px;
 }
+
+.text-size{
+  font-size: 30px;
+}
+
+.card-size{
+  width: 420px;
+}
+
+.container-all{
+  padding-top: 3%;
+  height: 100vh;
+  width: 1237px;
+}
+
+.table-all{
+  padding-top: 5%;
+}
+
+.card-display{
+  display: flex;
+  padding: 10px;
+}
+
+.video-display{
+  background-color: #61dafb;
+  height: 500px;
+  width: 665px;
+  border-radius: 10px;
+}
+.video-show{
+  padding-top: 10px;
+}
+
+.back-yard{
+  padding-top: 5%;
+}
+
+.Navbar{
+  background-color: #61dafb;
+}

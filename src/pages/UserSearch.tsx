@@ -90,7 +90,7 @@ export default function UserSearch() {
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <h1 className="display-4">Search User To Edit</h1>
       <Form onSubmit={handleSubmit} className="position-relative">
         <Form.Group className="mb-3" controlId="name">
@@ -105,7 +105,7 @@ export default function UserSearch() {
           Search
         </Button>
       </Form>
-
+      <Container className="table-all">
       {data.length > 0 && (
         <Table striped bordered hover className="mt-4">
           <thead>
@@ -121,7 +121,7 @@ export default function UserSearch() {
                 <td>{user.Eng_name}</td>
                 <td>{user.TH_name}</td>
                 <td>
-                  <Button variant="primary" onClick={() => handleEdit(user.id)}>
+                  <Button variant="primary" className = "me-2" onClick={() => handleEdit(user.id)}>
                     Edit
                   </Button>
                   <Button
@@ -138,6 +138,7 @@ export default function UserSearch() {
           </tbody>
         </Table>
       )}
+      </Container>
     </Container>
   );
 }

@@ -56,11 +56,11 @@ export default function MessageCard({
       <Card.Header>
         <Row>
           <Col className="d-flex align-items-center p-0">
-            <Card.Title className="text-start mt-auto mt-0">{mood}</Card.Title>
+            <Card.Title className="text-start mt-auto mt-0 p-2">{mood}</Card.Title>
           </Col>
           <Col className="text-end">
             <Link to={`/text/edit/${id}`}>
-              <Button onClick={handleEdit} variant="primary">
+              <Button onClick={handleEdit} variant="primary" className="m-2">
                 Edit
               </Button>
             </Link>

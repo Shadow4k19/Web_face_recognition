@@ -5,7 +5,7 @@ import AdminDataBox from "../components/AdminDataBoxEdit";
 
 export default function AdminManagementEdit() {
   return (
-    <Container>
+    <Container className="container-all">
       <h1 className="display-4">Edit Admin</h1>
       <AdminDataBox />
     </Container>

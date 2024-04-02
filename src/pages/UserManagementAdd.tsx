@@ -99,7 +99,7 @@ export default function UserManagementAdd() {
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <h1 className="display-4">Add User</h1>
       <Form className="position-relative" onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="name">

@@ -118,6 +118,7 @@ export default function AdminDataBox() {
               placeholder="Role"
               value={userdata.Role}
               onChange={(e) => handleChange("Role", e.target.value)}
+              disabled
             />
           </Form.Group>
         </Row>

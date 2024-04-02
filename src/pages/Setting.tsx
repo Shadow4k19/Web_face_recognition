@@ -13,7 +13,7 @@ export default function Setting() {
   };
 
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <Tabs
           id="setting"
@@ -32,7 +32,6 @@ export default function Setting() {
           </Tab>
         </Tabs>
       </Row>
-      <BackButton></BackButton>
     </Container>
   );
 }

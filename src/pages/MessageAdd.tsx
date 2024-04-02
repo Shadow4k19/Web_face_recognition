@@ -34,7 +34,7 @@ export default function MessageAdd() {
     }
   };
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <h1 className="display-4">Message Add</h1>
       </Row>

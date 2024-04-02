@@ -11,15 +11,15 @@ interface ManagementCardProps {
 export default function ManagementCard({ href, title, cardImageSrc }: ManagementCardProps) {
 	let navigate = useNavigate();
 	return (
-		<Col xs={12} md={true} className="text-center my-2">
+		<Col xs={12} md={true} className="text-center my-2 card-size">
 			<Card className='bg-light' onClick={() => navigate(href)}>
 				<Card.Header className='p-2'>
 					<Card.Img
 						src={cardImageSrc}
 						variant='top'
-						className='management-icon'
+						className='management-icon card-img'
 					/>
-					<Card.Title>
+					<Card.Title className='text-size'>
 						{title}
 					</Card.Title>
 				</Card.Header>

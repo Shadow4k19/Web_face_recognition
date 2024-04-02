@@ -8,7 +8,7 @@ body {
 
 canvas {
   align-self: self-start;
-  padding-top: 7.4%;
+  padding-top: 9.4%;
   position: absolute;
   z-index: 9999;
 }

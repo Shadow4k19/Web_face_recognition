@@ -7,7 +7,7 @@ import UserSearch from "./UserSearch";
 
 export default function UserManagement() {
   return (
-    <Container>
+    <Container className="container-all">
       <Row>
         <Tabs defaultActiveKey="addUser" id="uncontrolled-tab-example">
           <Tab eventKey="addUser" title="Add User" className="p-2">
@@ -25,7 +25,6 @@ export default function UserManagement() {
           </Tab>
         </Tabs>
       </Row>
-      <BackButton></BackButton>
     </Container>
   );
 }
