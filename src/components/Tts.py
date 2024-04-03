@@ -20,6 +20,7 @@ def speak_text(text):
 async def server(websocket, path):
     async for message in websocket:
         print("Received:", message)
+        print("Path:",path)
         speak_text(message)
 
 start_server = websockets.serve(server, "localhost", 8765)
